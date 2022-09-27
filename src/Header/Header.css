@@ -1,0 +1,61 @@
+.Header {
+  border-bottom: 1px solid var(--header-border);
+  position: sticky;
+  top: 0;
+  background-color: var(--main-wrapper-background-color);
+  z-index: 1;
+}
+
+.Header .container {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  font-size: 32px;
+  color: var(--primary-font-color);
+  font-family: "Roboto", "Balsamiq Sans", sans-serif;
+  justify-content: space-between;
+
+  padding: 21px 41px;
+  max-width: calc(1024px + 41px + 41px);
+  margin: 0 auto;
+}
+
+.Header p {
+  flex: 1;
+  text-align: left;
+}
+
+.Header button {
+  padding: 12px 24px;
+  font-size: 14px;
+  background: transparent;
+  border: 1px solid;
+  border-radius: 3px;
+  cursor: pointer;
+  margin: 0 14px;
+}
+
+.Header button.primary {
+  border-color: var(--primary-anchor-color);
+  color: var(--primary-anchor-color);
+}
+
+.Header button.secondary {
+  border-color: var(--secondary-anchor-color);
+  color: var(--secondary-anchor-color);
+}
+
+.Header button:hover:not(.disabled) {
+  border-color: var(--primary-anchor-color-hover);
+  color: var(--primary-anchor-color-hover);
+}
+
+.Header button.secondary:hover:not(.disabled) {
+  border-color: var(--secondary-anchor-color-hover);
+  color: var(--secondary-anchor-color-hover);
+}
+
+.Header button.disabled {
+  color: var(--secondary-font-color);
+  cursor: wait;
+}

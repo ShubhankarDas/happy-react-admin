@@ -1,0 +1,121 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  min-height: 100vh;
+  background-color: var(--light-white);
+}
+
+.container {
+  padding: 21px 41px;
+  max-width: calc(1024px + 41px + 41px);
+  margin: 0 auto;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.filter {
+  border: 1px solid black;
+  margin: 0px 6px;
+  text-align: right;
+  border-radius: 16px;
+  padding: 4px 15px;
+  padding-left: 26px;
+  position: relative;
+  cursor: pointer;
+}
+
+.filter.selected {
+  border-color: var(--dark-blue);
+  border-width: 2px;
+  color: var(--dark-blue);
+}
+
+.filter:not(.selected):hover {
+  color: var(--dark-blue);
+  border-color: var(--dark-blue);
+}
+
+.filter::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+
+  left: 12px;
+  top: 10px;
+}
+
+.filter-all::before {
+  background-color: var(--active);
+}
+.filter-active::before {
+  background-color: var(--active);
+}
+.filter-inactive::before {
+  background-color: var(--inactive);
+}
+
+.card-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.card {
+  width: 250px;
+  height: 300px;
+  display: flex;
+  margin: 12px auto;
+  padding: 12px;
+  border-radius: 3px;
+  border: 1px solid #00000000;
+  cursor: pointer;
+  flex-direction: column;
+  position: relative;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+
+  top: 4px;
+  right: 4px;
+}
+
+.card.active::before {
+  /* border: 1px solid var(--active); */
+  background-color: var(--active);
+}
+
+.card.inactive::before {
+  /* border: 1px solid var(--inactive); */
+  background-color: var(--inactive);
+}
+
+.card:hover {
+  border-color: #dfdfdf;
+}
+
+.card-image {
+  width: 100%;
+  flex: 1;
+}
+
+.card-message {
+  margin: 0;
+  margin-top: 1rem;
+}
+
+.card-gutter {
+  flex-grow: 1;
+  visibility: hidden;
+}
