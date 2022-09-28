@@ -3,7 +3,13 @@ import { storage } from "../config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import { database as db } from "../config/firebase";
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore/lite";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore/lite";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import Header from "../Header";
 
@@ -36,14 +42,14 @@ const Message = () => {
   };
 
   const uploadImage = async () => {
-    if (imageUpload == null) return;
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
 
     await uploadBytes(imageRef, imageUpload);
     return await getDownloadURL(imageRef);
   };
 
-  const saveMessage = async (onFinishCallBack = null) => {
+  const saveMessage = async () => {
+    if (imageUpload == null || message.trim() === "") return;
     setIsLoading(true);
     const url = await uploadImage();
 
@@ -51,9 +57,10 @@ const Message = () => {
       message,
       imageUrl: url,
       status: "inactive",
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     });
-
-    if (onFinishCallBack) onFinishCallBack();
+    navigate("/messages");
   };
 
   const onDeleteClick = async () => {
@@ -62,6 +69,7 @@ const Message = () => {
 
     await updateDoc(currentQuoteRef, {
       deleted: true,
+      updatedAt: serverTimestamp(),
     });
     navigate("/messages");
   };
@@ -72,6 +80,7 @@ const Message = () => {
 
     await updateDoc(currentQuoteRef, {
       status: status ? "active" : "inactive",
+      updatedAt: serverTimestamp(),
     });
     setIsActive(status);
     setIsLoading(false);
@@ -94,7 +103,12 @@ const Message = () => {
   return (
     <div className={`message ${darkTheme ? "dark-mode" : "light-mode"}`}>
       {isLoading && <div className="loading"></div>}
-      <Header onPrimaryClick={saveMessage} showCancel={true} />
+      <Header
+        onPrimaryClick={saveMessage}
+        primaryText={showEditOptions ? "Update" : "Save"}
+        onSecondaryClick={() => navigate("/messages")}
+        secondaryText={showEditOptions ? "Back" : "Cancel"}
+      />
       <div className="content">
         <div className="options-container">
           <SunIcon
@@ -157,6 +171,7 @@ const Message = () => {
           style={{ display: "none" }}
           type="file"
           ref={inputRef}
+          accept=".svg"
           onChange={(e) => {
             if (e.target.files[0]) {
               setImageUpload(e.target.files[0]);

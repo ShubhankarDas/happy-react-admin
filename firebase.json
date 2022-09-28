@@ -1,0 +1,21 @@
+{
+  "hosting": {
+    "site": "happy-days-admin",
+    "public": "build",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "emulators": {
+    "hosting": {
+      "port": 5001
+    },
+    "ui": {
+      "enabled": true
+    }
+  }
+}

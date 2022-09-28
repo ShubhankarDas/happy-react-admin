@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore/lite";
+import { collection, getDocs, query, orderBy } from "firebase/firestore/lite";
 import { database as db } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +8,10 @@ import Header from "../Header";
 import "./Home.css";
 
 const Home = () => {
-  const quotesV2CollectionRef = collection(db, "quotesV2");
+  const quotesV2CollectionRef = query(
+    collection(db, "quotesV2"),
+    orderBy("updatedAt", "desc")
+  );
   const [quotes, setQuotes] = useState([]);
   const [filteredQuotes, setFilteredQuotes] = useState([]);
   const [filterOption, setFilterOption] = useState("all");
@@ -28,16 +31,13 @@ const Home = () => {
     const getAllQuotes = async () => {
       const allQuotes = await getDocs(quotesV2CollectionRef);
       const qs = [];
-      allQuotes.forEach((q) => {
+      allQuotes.forEach(async (q) => {
         qs.push({ key: q.id, ...q.data() });
       });
-      console.log(qs);
       setQuotes(qs);
     };
 
     getAllQuotes();
-
-    // setQuotes(dummy);
   }, []);
 
   useEffect(() => {
