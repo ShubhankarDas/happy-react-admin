@@ -1,6 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { storage } from "../config/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  updateMetadata,
+} from "firebase/storage";
 import { v4 } from "uuid";
 import { database as db } from "../config/firebase";
 import {
@@ -35,16 +40,28 @@ const Message = () => {
   const [darkTheme, setDarkTheme] = useState(false);
   const [isActive, setIsActive] = useState(true);
 
+  const metadata = {
+    cacheControl: "public,max-age=86400",
+    contentType: "image/svg+xml",
+  };
+
   const inputRef = useRef(null);
 
   const onAddImageClick = () => {
     inputRef.current.click();
   };
 
+  const getNewFileName = (imageName) =>
+    `${imageName.split(".").slice(0, -1).join("")}_${v4()}.${imageName
+      .split(".")
+      .slice(-1)
+      .join("")}`;
+
   const uploadImage = async () => {
-    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    const imageRef = ref(storage, `images/${getNewFileName(imageUpload.name)}`);
 
     await uploadBytes(imageRef, imageUpload);
+    await updateMetadata(imageRef, metadata);
     return await getDownloadURL(imageRef);
   };
 
