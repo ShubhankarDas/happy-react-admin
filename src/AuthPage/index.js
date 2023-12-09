@@ -51,7 +51,7 @@ const AuthPage = () => {
 
   return (
     <div className="AuthPage">
-      <h1>Auth screen</h1>
+      <h1>🌻 Have a happy day 🌻</h1>
       {loading ? (
         <Loader />
       ) : (
