@@ -4,6 +4,15 @@
   top: 0;
   background-color: var(--main-wrapper-background-color);
   z-index: 1;
+
+  transition: background-color 500ms ease-in-out, color 1200ms ease-in-out,
+    border-color 1200ms ease-in-out;
+  -webkit-transition: background-color 500ms ease-in-out,
+    color 1200ms ease-in-out, border-color 1200ms ease-in-out;
+  -o-transition: background-color 500ms ease-in-out, color 1200ms ease-in-out,
+    border-color 500ms ease-in-out;
+  -moz-transition: background-color 500ms ease-in-out, color 1200ms ease-in-out,
+    border-color 1200ms ease-in-out;
 }
 
 .Header .container {

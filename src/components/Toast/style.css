@@ -1,0 +1,29 @@
+.Toast {
+  position: fixed;
+  z-index: 10;
+  bottom: 30px;
+  right: 30px;
+  padding: 8px 14px;
+  background-color: var(--light-white);
+  border-radius: 10px;
+  transition: transform 0.5s;
+  transform: translateX(200px);
+  border: 3px solid;
+}
+
+.Toast.error {
+  border-color: #ff5722;
+}
+
+.Toast.success {
+  border-color: #4caf50;
+}
+
+.Toast.show {
+  transform: translateX(0);
+}
+
+.Toast p {
+  padding: 0;
+  margin: 0;
+}

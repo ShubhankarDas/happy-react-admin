@@ -7,6 +7,7 @@
 
 # Firebase cache
 .firebase/
+firebase-debug.log
 
 # testing
 /coverage

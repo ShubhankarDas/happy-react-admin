@@ -12,6 +12,28 @@
   margin: 0 auto;
 }
 
+.link-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.link-container a {
+  border: 1px solid black;
+  margin: 0px 6px;
+  text-align: right;
+  border-radius: 16px;
+  padding: 4px 15px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link-container a:hover {
+  color: var(--dark-blue);
+  border-color: var(--dark-blue);
+}
+
 .filter-container {
   display: flex;
   flex-direction: row;
@@ -106,8 +128,8 @@
 }
 
 .card-image {
-  width: 100%;
   flex: 1;
+  min-height: 0;
 }
 
 .card-message {

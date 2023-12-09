@@ -1,0 +1,33 @@
+.AuthPage {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 100vh;
+}
+
+.AuthPage button {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 26px;
+  align-self: center;
+  background: #4285f4;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.AuthPage button:hover {
+  background: #1b6df4;
+}
+
+.AuthPage svg {
+  width: 20px;
+  height: 20px;
+  margin: 4px;
+  margin-right: 12px;
+  fill: white;
+}

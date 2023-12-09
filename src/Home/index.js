@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore/lite";
 import { database as db } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
@@ -6,16 +6,21 @@ import { useNavigate } from "react-router-dom";
 import Header from "../Header";
 
 import "./Home.css";
+import Loader from "../components/Loader";
+import { getAuth, signOut } from "firebase/auth";
+import { ToastContext } from "../context/toastContext";
 
 const Home = () => {
   const quotesV2CollectionRef = query(
     collection(db, "quotesV2"),
     orderBy("updatedAt", "desc")
   );
+  const [loading, setLoading] = useState(false);
   const [quotes, setQuotes] = useState([]);
   const [filteredQuotes, setFilteredQuotes] = useState([]);
   const [filterOption, setFilterOption] = useState("all");
   const navigate = useNavigate();
+  const toastContext = useContext(ToastContext);
 
   const onCardClick = (messageId) => {
     navigate(`/message/${messageId}`, {
@@ -27,13 +32,28 @@ const Home = () => {
     navigate(`/message/new`);
   };
 
+  const onLogoutClick = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        navigate(`/`);
+        toastContext.success("Goodbye");
+      })
+      .catch((error) => {
+        toastContext.error("Error Occurred");
+        console.log("[Error] " + error.message);
+      });
+  };
+
   useEffect(() => {
+    setLoading(true);
     const getAllQuotes = async () => {
       const allQuotes = await getDocs(quotesV2CollectionRef);
       const qs = [];
       allQuotes.forEach(async (q) => {
         qs.push({ key: q.id, ...q.data() });
       });
+      setLoading(false);
       setQuotes(qs);
     };
 
@@ -50,7 +70,28 @@ const Home = () => {
 
   return (
     <div className="home light-mode">
-      <Header primaryText="New" onPrimaryClick={onAddButtonClick} />
+      <Header
+        primaryText="New"
+        onPrimaryClick={onAddButtonClick}
+        secondaryText="Logout"
+        onSecondaryClick={onLogoutClick}
+      />
+      <div className="container link-container">
+        <a
+          href="https://undraw.co/illustrations"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          Link 1
+        </a>
+        <a
+          href="https://delesign.com/free-designs/graphics/illustration"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          Link 2
+        </a>
+      </div>
       <div className="container filter-container">
         <div
           className={`filter filter-all ${
@@ -96,6 +137,7 @@ const Home = () => {
           </div>
         ))}
       </div>
+      {loading && <Loader />}
     </div>
   );
 };

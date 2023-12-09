@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { storage } from "../config/firebase";
 import {
   ref,
@@ -24,11 +24,13 @@ import DeleteIcon from "../images/DeleteIcon";
 import RadioIcon from "../images/RadioIcon";
 
 import "./Message.css";
+import { ToastContext } from "../context/toastContext";
 
 const Message = () => {
   const { messageId } = useParams();
   const { state: selectedQuote } = useLocation();
   const navigate = useNavigate();
+  const toastContext = useContext(ToastContext);
 
   const [isLoading, setIsLoading] = useState(false);
   const [showEditOptions, setShowEditOptions] = useState(false);
@@ -68,38 +70,71 @@ const Message = () => {
   const saveMessage = async () => {
     if (imageUpload == null || message.trim() === "") return;
     setIsLoading(true);
-    const url = await uploadImage();
+    try {
+      const url = await uploadImage();
 
-    await addDoc(collection(db, "quotesV2"), {
-      message,
-      imageUrl: url,
-      status: "inactive",
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    });
+      await addDoc(collection(db, "quotesV2"), {
+        message,
+        imageUrl: url,
+        status: "inactive",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      toastContext.success("Saved!");
+    } catch (error) {
+      if (error.code === "permission-denied") {
+        console.log(error.message);
+        toastContext.error("Access Denied");
+      } else {
+        console.log(error);
+        toastContext.error("Error Occurred");
+      }
+    }
     navigate("/messages");
   };
 
   const onDeleteClick = async () => {
     setIsLoading(true);
-    const currentQuoteRef = doc(db, "quotesV2", selectedQuote.key);
+    try {
+      const currentQuoteRef = doc(db, "quotesV2", selectedQuote.key);
 
-    await updateDoc(currentQuoteRef, {
-      deleted: true,
-      updatedAt: serverTimestamp(),
-    });
-    navigate("/messages");
+      await updateDoc(currentQuoteRef, {
+        deleted: true,
+        updatedAt: serverTimestamp(),
+      });
+      toastContext.success("Deleted!");
+      navigate("/messages");
+    } catch (error) {
+      if (error.code === "permission-denied") {
+        console.log(error.message);
+        toastContext.error("Access Denied");
+      } else {
+        console.log(error);
+        toastContext.error("Error Occurred");
+      }
+    }
   };
 
   const onSetActiveClick = async (status) => {
     setIsLoading(true);
-    const currentQuoteRef = doc(db, "quotesV2", selectedQuote.key);
+    try {
+      const currentQuoteRef = doc(db, "quotesV2", selectedQuote.key);
 
-    await updateDoc(currentQuoteRef, {
-      status: status ? "active" : "inactive",
-      updatedAt: serverTimestamp(),
-    });
-    setIsActive(status);
+      await updateDoc(currentQuoteRef, {
+        status: status ? "active" : "inactive",
+        updatedAt: serverTimestamp(),
+      });
+      setIsActive(status);
+      toastContext.success("Updated!");
+    } catch (error) {
+      if (error.code === "permission-denied") {
+        console.log(error.message);
+        toastContext.error("Access Denied");
+      } else {
+        console.log(error.message);
+        toastContext.error("Error Occurred");
+      }
+    }
     setIsLoading(false);
   };
 
