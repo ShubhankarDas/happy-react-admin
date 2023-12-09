@@ -21,6 +21,7 @@ const AuthPage = () => {
   const toastContext = useContext(ToastContext);
 
   useEffect(() => {
+    setLoading(true);
     onAuthStateChanged(auth, (user) => {
       if (user) {
         navigate("/messages");
@@ -28,9 +29,10 @@ const AuthPage = () => {
       }
       setLoading(false);
     });
-  }, []);
+  }, [auth, navigate, toastContext]);
 
   const signIn = () => {
+    setLoading(true);
     setPersistence(auth, browserLocalPersistence)
       .then(() => {
         return signInWithPopup(auth, provider);
@@ -44,6 +46,7 @@ const AuthPage = () => {
         toastContext.error("Error occurred");
         console.log(`[Error][${errorCode}] - ${errorMessage}`);
       });
+    setLoading(false);
   };
 
   return (

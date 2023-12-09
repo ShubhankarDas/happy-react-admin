@@ -58,7 +58,7 @@ const Home = () => {
     };
 
     getAllQuotes();
-  }, []);
+  }, [quotesV2CollectionRef]);
 
   useEffect(() => {
     if (filterOption === "all") {

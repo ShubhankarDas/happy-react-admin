@@ -150,7 +150,7 @@ const Message = () => {
         navigate("/message/new");
       }
     }
-  }, []);
+  }, [messageId, navigate, selectedQuote]);
 
   return (
     <div className={`message ${darkTheme ? "dark-mode" : "light-mode"}`}>
