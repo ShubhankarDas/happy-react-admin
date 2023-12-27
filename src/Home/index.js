@@ -11,10 +11,6 @@ import { getAuth, signOut } from "firebase/auth";
 import { ToastContext } from "../context/toastContext";
 
 const Home = () => {
-  const quotesV2CollectionRef = query(
-    collection(db, "quotesV2"),
-    orderBy("updatedAt", "desc")
-  );
   const [loading, setLoading] = useState(false);
   const [quotes, setQuotes] = useState([]);
   const [filteredQuotes, setFilteredQuotes] = useState([]);
@@ -48,7 +44,9 @@ const Home = () => {
   useEffect(() => {
     setLoading(true);
     const getAllQuotes = async () => {
-      const allQuotes = await getDocs(quotesV2CollectionRef);
+      const allQuotes = await getDocs(
+        query(collection(db, "quotesV2"), orderBy("updatedAt", "desc"))
+      );
       const qs = [];
       allQuotes.forEach(async (q) => {
         qs.push({ key: q.id, ...q.data() });
@@ -58,7 +56,7 @@ const Home = () => {
     };
 
     getAllQuotes();
-  }, [quotesV2CollectionRef]);
+  }, []);
 
   useEffect(() => {
     if (filterOption === "all") {
